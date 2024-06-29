@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load core_extras %}
+
+{% block title %}{{item.title}}{% endblock title %}
+{% block keywords %}
+{% for tag in item.tags.all %}{{tag}},{% endfor %}
+{% endblock keywords %}
+
+{% block breadcrumb %}
+<!-- Breadcrumbs -->
+<nav class="py-3 px-5 text-blog-dark bg-gray-50">
+    <div class="container px-2">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+            <li><a href="/"><i class="fa fa-home"></i> 首 页</a></li>
+            <li><a href="#"><i class="fa fa-chevron-right mr-2"></i> 博文日志</a></li>
+            <li><i class="fa fa-chevron-right mr-2"></i> <span class="text-gray-400">正文</span></li>
+        </ol>
+    </div>
+</nav>
+{% endblock breadcrumb %}
+
+{% block content %}
+<!-- Main Content -->
+<main class="container my-4 flex flex-col md:flex-row items-start">
+    <div class="w-full bg-white p-4 md:w-3/4 md:mr-4">
+        <p><span class="bg-primary text-white py-1 px-4 text-sm">{{item.category.name}}</span></p>
+
+        <!-- 标题 -->
+        <h1 class="text-4xl font-light my-4">{{item.title}}</h1>
+        
+        <!-- 作者 & 时间 -->
+        <div class="flex justify-between text-sm text-gray-400">
+            <div class="flex items-center space-x-4">
+                <img style="width:30px;height:30px" src="{{item.author.profile.avatar.url}}" alt="{{item.author.profile.fullname}}" class="rounded-full">
+                <span>{{item.author.profile.fullname}}</span>
+                <span><i class="fas fa-clock"></i> {{item.created}}</span>
+            </div>
+            <div>
+                <span class="mr-4"><i class="fas fa-comment"></i> {{item.comments.all|length}}</span>
+                <span class="mr-4"><i class="fas fa-eye"></i> {{item.views}}</span>
+            </div>
+        </div>
+
+        <!-- 正文 -->
+        <div class="my-6 space-y-4">
+            {% if item.img %}
+                <img src="{{item.img.url}}" alt="{{item.title}}">
+            {% endif %}
+            <div>
+                {{item.body|safe}}
+            </div>
+        </div>
+
+        <!-- 文章标签 -->
+        <div class="my-4 border-y py-6 space-x-2 text-sm">
+            <span><i class="fas fa-tag"></i> 标签：</span>
+                {% for tag in item.tags.all %}
+                <span class="py-1 px-2 bg-blog-dark text-white uppercase"><a href="{% url 'posts' %}?tag={{tag.slug}}">{{tag}}</a></span>
+                {% endfor %}
+        </div>
+
+        <!-- 上一篇 下一篇 -->
+        <div class="my-6 flex flex-col md:flex-row justify-between">
+            <div class="flex w-full md:w-1/2 justify-between items-center space-x-2 md:border-r">
+                <div class="w-1/4">
+                    {% if prev_post %}
+                    <img class="rounded-md" style="width:140px" src="{{prev_post.img.url}}" alt="{{prev_post.title}}">
+                    {% endif %}
+                </div>
+                <div class="w-3/4">
+                    <div class="text-sm"><i class="fas fa-caret-left text-primary"></i> 上一篇</div>
+                    {% if prev_post %}
+                    <h4><a href="{{prev_post.get_absolute_url}}">{{prev_post.title}}</a></h4>
+                    {% else %}
+                    <h4>没有了</h4>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="flex w-full md:w-1/2 justify-between items-center space-x-2">
+                <div class="w-3/4 md:justify-end md:text-right">
+                    <div class="text-sm">下一篇 <i class="fas fa-caret-right text-primary"></i></div>
+                    {% if next_post %}
+                    <h4><a href="{{next_post.get_absolute_url}}">{{next_post.title}}</a></h4>
+                    {% else %}
+                    <h4>没有了</h4>
+                    {% endif %}
+                </div>
+                <div class="w-1/4">
+                    {% if next_post %}
+                    <img class="rounded-md" style="width:140px" src="{{next_post.img.url}}" alt="{{next_post.title}}">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- 作者信息 -->
+        <div class="my-4 p-4 bg-gray-100 rounded-md flex justify-between">
+            <div class="mr-4 w-1/5">
+                <img src="{{item.author.profile.avatar.url}}" class="w-24" alt="{{item.author.profile.fullname}}">
+            </div>
+            <div class="w-4/5">
+                <h4 class="text-xl font-light mb-4">{{item.author.profile.fullname}}</h4>
+                <p class="text-sm text-blog-dark">
+                    {{item.author.profile.bio|safe}}
+                </p>
+            </div>
+        </div>
+
+        <!-- 日志评论 -->
+        <div class="my-6">
+            <div>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <p class="mb-2">
+                        <!-- <input class="border rounded-md p-2 text-sm" placeholder="姓名" type="text" name="name" id="name"> -->
+                        {{form.name}}
+                    </p>
+                    <p>
+                        <!--
+                            <textarea class="w-full border rounded-md p-2 text-sm" name="body" id="body" cols="30" rows="3" placeholder="留下您的评论"></textarea>
+                        -->
+                        {{form.body}}
+                    </p>
+                    <div class="text-right my-2">
+                        <input type="submit" value="提交" class="bg-primary py-1 px-4 text-sm text-white rounded-full cursor-pointer">
+                        <input type="reset" value="取消" class="border py-1 px-4 text-sm rounded-full cursor-pointer">
+                    </div>
+                </form>
+            </div>
+
+            <h4 class="text-xl border-b py-4 mb-4"><span class="border-b-4 border-b-primary py-4">精彩评论</span></h4>
+
+            {% for comment in item.comments.all %}
+            {% if comment.active %}
+            <div class="flex my-4">
+                <div class="mr-4">
+                    <img src="https://picsum.photos/40" class="rounded-full" alt="{{comment.name}}" class="w-full">
+                </div>
+                <div>
+                    <h4>{{comment.name}}</h4>
+                    <p class="text-sm space-x-4"><span>{{comment.created}}</span><span>{{comment.ip}}</span></p>
+                    <p class="my-2 text-sm">{{comment.body}}</p>
+                    <hr>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <!-- 右侧边栏 -->
+    <div class="w-full bg-white p-2 md:w-1/4">
+        <!-- Weather -->
+        {% weather %}
+
+        {% include 'core/categories.html' %}
+
+        {% include 'core/latest-posts.html' %}
+
+        {% display_most_commented_posts 3 %}
+
+        {% display_tags %}
+    </div>
+</main>
+{% endblock content %}

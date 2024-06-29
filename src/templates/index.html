@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load core_extras %}
+
+{% block header %}
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/swiper@8/swiper-bundle.min.css"
+/>
+
+{% endblock header %}
+
+{% block title %}Eason 的个人技术博客{% endblock title %}
+{% block keywords %}Eason, Python, 编程, 技术分享{% endblock keywords %}
+{% block description %}Eason 日常技术分享，学习心得体会，内容涵盖 Python 语言、Flask、Django……{% endblock description %}
+
+{% block breadcrumb %}{% endblock breadcrumb %}
+
+{% block content %}
+
+<!-- Slider Placeholder -->
+<section class="container mx-auto mt-4 overflow-hidden">
+    <div id="slider" class="w-full h-[300px] md:h-full relative">
+        <div class="swiper-wrapper">
+            {% for slide in slides %}
+            <!-- 轮播图列表项 -->
+            <div class="swiper-slide w-full relative">
+                <img class="w-full h-full object-cover" src="{{slide.img.url}}" alt="{{slide.title}}">
+                <div class="absolute top-1/3 md:left-20 left-2 font-light text-white">
+                    <div class="text-4xl"><a href="{{slide.link}}">{{slide.title}}</a></div>
+                    <div class="text-2xl">{{slide.sub_title}}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<main class="container my-4 flex flex-col md:flex-row items-start">
+    <div class="w-full bg-white p-2 md:w-3/4 md:mr-4">
+        {% for item in items %}
+        <!-- Article Item -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-2">
+            <!-- Image with category -->
+            <div class="w-full md:w-1/4 md:mr-4 relative">
+                <img class="object-cover w-full md:w-60" src="{{item.img.url}}" alt="{{item.title}}">
+                <span class="absolute bg-primary text-white text-sm px-2 top-2 right-2">{{item.category.name}}</span>
+            </div>
+            <!-- Title & Summary -->
+            <div class="md:w-3/4 mt-2">
+                <h3 class="text-lg"><a href="{{item.get_absolute_url}}">{{item.title}}</a></h3>
+                <p class="text-sm mt-1"> <i class="fa fa-clock"></i> {{item.created|date:"Y-m-d"}}</p>
+                <p class="my-1">{{item.summary|safe}}</p>
+                <div class="text-sm flex justify-between">
+                    <div class="flex items-center justify-between space-x-4">
+                        <img class="w-7 rounded-full" src="{{item.author.profile.avatar.url}}" alt="{{item.author.profile.fullname}}">
+                        <span>{{item.author.profile.fullname}}</span>
+                    </div>
+                    <div class="flex space-x-4">
+                        <span><i class="fa fa-comment"></i> {{item.comments.all|length}}</span>
+                        <span><i class="fa fa-eye"></i> {{item.views}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Button -->
+        <div class="text-center my-6 py-4">
+            <a class="bg-secondary text-white py-3 px-8 rounded-md" href="{% url 'posts' %}">查看所有文章 <i
+                    class="fa fa-angles-right"></i></a>
+        </div>
+    </div>
+
+    <div class="w-full bg-white p-2 md:w-1/4">
+
+        {% weather %}
+
+        {% include 'core/categories.html' %}
+
+        {% include 'core/latest-posts.html' %}
+
+        <!-- Chosen posts -->
+        <div class="mb-8">
+            <h2 class="text-xl mb-3 border-b py-2">
+                <span class="border-b-4 border-b-primary py-2">推荐阅读</span>
+            </h2>
+            <ul class="my-4">
+                {% for item in CHOSE_POSTS %}
+                <li class="mb-2"><i class="fa fa-chevron-right text-sm text-slate-300 mr-2"></i> <a href="{{item.get_absolute_url}}">{{item.title}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        {% display_most_commented_posts 3 %}
+
+        {% display_tags %}
+    </div>
+</main>
+
+{% endblock content %}
+
+{% block scripts %}
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+
+<script>
+    const swiper = new Swiper('#slider', {
+        loop: true,
+        autoplay: true,
+        speed: 500,
+        pagination: {
+            el: ".swiper-pagination"
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        }
+    })
+</script>
+{% endblock scripts %}

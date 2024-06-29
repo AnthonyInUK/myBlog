@@ -1,0 +1,11 @@
+<!-- Popular posts -->
+<div class="mb-8">
+    <h2 class="text-xl mb-3 border-b py-2">
+        <span class="border-b-4 border-b-primary py-2">热门文章</span>
+    </h2>
+    <ul class="my-4">
+        {% for item in popular_posts %}
+        <li class="mb-2"><i class="fa fa-chevron-right text-sm text-slate-300 mr-2"></i> <a href="{{item.get_absolute_url}}">{{item.title}}</a></li>
+        {% endfor %}
+    </ul>
+</div>

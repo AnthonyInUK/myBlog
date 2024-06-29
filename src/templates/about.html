@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}关于我{% endblock title %}
+
+{% block breadcrumb %}
+<!-- Breadcrumbs -->
+<nav class="py-3 px-5 text-blog-dark bg-gray-50">
+    <div class="container px-2">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+            <li><a href="/"><i class="fa fa-home"></i> 首 页</a></li>
+            <li><i class="fa fa-chevron-right mr-2"></i> <span class="text-gray-400">关于我</span></li>
+        </ol>
+    </div>
+</nav>{% endblock breadcrumb %}
+
+{% block content %}
+    <!-- 主内容区 -->
+    <main class="container my-4 flex flex-col md:flex-row items-start px-2">
+        <!-- 左侧边栏 -->
+        <div class="w-full md:w-2/5 bg-white mb-4 md:mr-4 rounded-md shadow-md">
+            <!-- 顶部背景 -->
+            <div class="rounded-t-md w-full h-32 relative bg-gradient-to-r from-purple-500 to-pink-500">
+                <div class="flex items-center space-x-6 absolute left-6 -bottom-4">
+                    <!-- 头像 -->
+                    <img src="{{item.avatar.url}}" style="height:100px;width:100px" class="rounded-full" alt="{{item.fullname}}">
+                    <!-- 姓名，头衔 -->
+                    <div class="text-white">
+                        <h1 class="text-xl">{{item.fullname}}</h1>
+                        <p class="text-sm">{{item.title}}</p>
+                        <div class="mt-2 bg-white text-blog-dark text-xs rounded-sm shadow-lg p-1 text-center">
+                            <span class="border-r mr-4"><span class="text-primary">28</span> 篇文章</span>
+                            <span><span class="text-primary">{{item.hits}}</span> 热度</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 简介 -->
+            <div class="mt-10 mx-6">
+                <h2 class="mb-4 font-light text-xl">关于我</h2>
+                <p class="font-light text-sm">{{item.bio|safe}}</p>
+            </div>
+
+            <!-- 联系方式列表 -->
+            <ul class="m-6 text-sm text-teritary">
+                <li class="mb-1 bg-gray-50 p-2">
+                    <i class="fa fa-phone mr-4"></i> {{item.phone}}
+                </li>
+                <li class="mb-1 bg-gray-50 p-2">
+                    <i class="fab fa-weixin mr-4"></i> {{item.wechat}}
+                </li>
+                <li class="mb-1 bg-gray-50 p-2">
+                    <i class="fab fa-qq mr-4"></i> {{item.qq}}
+                </li>
+                <li class="mb-1 bg-gray-50 p-2">
+                    <i class="fas fa-envelope mr-4"></i> {{item.email}}
+                </li>
+                <li class="mb-1 bg-gray-50 p-2">
+                    <i class="fa fa-home mr-4"></i> <a target="_blank" href="{{item.url}}">{{item.url}}</a>
+                </li>
+                <li class="mb-1 bg-gray-50 p-2">
+                    <i class="fab fa-github mr-4"></i> {{item.github}}
+                </li>
+            </ul>
+        </div>
+
+        <!-- 右侧列表 -->
+        <div class="w-full md:w-3/5 bg-white p-4">
+            <div class="mb-6">
+                <h2 class="text-lg py-2 border-b"><span class="py-2 border-b-4 border-b-primary">教育经历</span></h2>
+                <div>
+                    <div class="border-b py-4">
+                        <h5 class="mb-2"><span class="bg-gray-100 py-1 px-4">2016 - 2020</span></h5>
+                        <h4 class="font-bold mb-2">北京 XXX 大学</h4>
+                        <p class="text-sm text-gray-400">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, incidunt animi alias dolore commodi eligendi voluptatum officia minima cupiditate adipisci? Voluptatem, est possimus unde non labore odio laboriosam facere quo.
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <div class="border-b py-4">
+                        <h5 class="mb-2"><span class="bg-gray-100 py-1 px-4">2016 - 2020</span></h5>
+                        <h4 class="font-bold mb-2">北京 XXX 大学</h4>
+                        <p class="text-sm text-gray-400">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, incidunt animi alias dolore commodi eligendi voluptatum officia minima cupiditate adipisci? Voluptatem, est possimus unde non labore odio laboriosam facere quo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h2 class="text-lg py-2 border-b"><span class="py-2 border-b-4 border-b-primary">工作经历</span></h2>
+                <div>
+                    <div class="border-b py-4">
+                        <h5 class="mb-2"><span class="bg-gray-100 py-1 px-4">2016 - 2020</span></h5>
+                        <h4 class="font-bold mb-2">北京 XXX 公司</h4>
+                        <p class="text-sm text-gray-400">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, incidunt animi alias dolore commodi eligendi voluptatum officia minima cupiditate adipisci? Voluptatem, est possimus unde non labore odio laboriosam facere quo.
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <div class="border-b py-4">
+                        <h5 class="mb-2"><span class="bg-gray-100 py-1 px-4">2016 - 2020</span></h5>
+                        <h4 class="font-bold mb-2">北京 XXX 公司</h4>
+                        <p class="text-sm text-gray-400">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, incidunt animi alias dolore commodi eligendi voluptatum officia minima cupiditate adipisci? Voluptatem, est possimus unde non labore odio laboriosam facere quo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h2 class="text-lg py-2 border-b"><span class="py-2 border-b-4 border-b-primary">掌握技能</span></h2>
+                <div class="my-4 text-gray-500 flex justify-between">
+                    <ul class="space-y-2">
+                        <li><i class="fa fa-keyboard mr-4"></i> Python 语言</li>
+                        <li><i class="fa fa-keyboard mr-4"></i> Go 语言</li>
+                        <li><i class="fa fa-keyboard mr-4"></i> Python 语言</li>
+                        <li><i class="fa fa-keyboard mr-4"></i> Python 语言</li>
+                    </ul>
+                    <ul class="space-y-2">
+                        <li><i class="fa fa-keyboard mr-4"></i> PhotoShop 工具</li>
+                        <li><i class="fa fa-keyboard mr-4"></i> MongoDB 数据库</li>
+                        <li><i class="fa fa-keyboard mr-4"></i> Python 语言</li>
+                        <li><i class="fa fa-keyboard mr-4"></i> Python 语言</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock content %}

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load core_extras %}
+
+{% block breadcrumb %}
+<!-- Breadcrumbs -->
+<nav class="py-3 px-5 text-blog-dark bg-gray-50">
+    <div class="container px-2">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+            <li><a href="/"><i class="fa fa-home"></i> 首 页</a></li>
+            <li><a href="{% url 'posts' %}"><i class="fa fa-chevron-right mr-2"></i> 博文日志</a></li>
+            <li><i class="fa fa-chevron-right mr-2"></i> <span class="text-gray-400">列表</span></li>
+        </ol>
+    </div>
+</nav>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+<!-- Main Content -->
+<main class="container my-4 flex flex-col md:flex-row items-start">
+    <div class="w-full bg-white p-2 md:w-3/4 md:mr-4">
+        
+        <div class="w-full my-4 border-b-2 border-b-primary">
+            <ul class="flex items-center flex-row space-x-1">
+                {% if not request.GET.cat %}
+                <li class="bg-primary text-white py-1 px-3"><a href="{% url 'posts' %}">全部</a></li>
+                {% else %}
+                <li class="bg-gray-100 text-black py-1 px-3"><a href="{% url 'posts' %}">全部</a></li>
+                {% endif %}
+
+                {% for cat in CATEGORIES %}
+                {% if request.GET.cat == cat.id|to_str %}
+                <li class="bg-primary text-white py-1 px-3"><a href="?cat={{cat.id}}">{{cat.name}}</a></li>
+                {% else %}
+                <li class="bg-gray-100 text-black py-1 px-3"><a href="?cat={{cat.id}}">{{cat.name}}</a></li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        
+        {% for item in items %}
+        <!-- Article Item -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-2">
+            <!-- Image with category -->
+            <div class="w-full md:w-1/4 md:mr-4 relative">
+                <img class="object-cover w-full md:w-60" src="{{item.img.url}}" alt="{{item.title}}">
+                <span class="absolute bg-primary text-white text-sm px-2 top-2 right-2">{{item.category.name}}</span>
+            </div>
+            <!-- Title & Summary -->
+            <div class="md:w-3/4 mt-2">
+                <h3 class="text-lg"><a href="{{item.get_absolute_url}}">{{item.title}}</a></h3>
+                <p class="text-sm mt-1"> <i class="fa fa-clock"></i> {{item.created}}</p>
+                <p class="my-1">{{item.summary|safe}}</p>
+                <div class="text-sm flex justify-between">
+                    <div class="flex items-center justify-between space-x-4">
+                        <img class="w-7 rounded-full" src="{{item.author.profile.avatar.url}}" alt="{{item.author.profile.fullname}}">
+                        <span>{{item.author.profile.fullname}}</span>
+                    </div>
+                    <div class="flex space-x-4">
+                        <span><i class="fa fa-comment"></i> {{item.comments.all|length}}</span>
+                        <span><i class="fa fa-eye"></i> {{item.views}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- 分页按钮 -->
+        <div class="container flex justify-center mx-auto py-4">
+            <ul class="flex">
+                {% if items.has_previous %}
+                <li><a href="?page={{items.previous_page_number}}" class="align-middle mx-4 h-10 py-3 px-5 text-blog-dark bg-white border border-blog-dark">前页</a></li>
+                {% endif %}
+                {% if items.has_next %}
+                <li><a href="?page={{items.next_page_number}}" class="align-middle mx-4 h-10 py-3 px-5 text-blog-dark bg-white border border-blog-dark">后页</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="w-full bg-white p-2 md:w-1/4">
+        <!-- Weather -->
+        {% weather %}
+
+        {% include 'core/categories.html' %}
+
+        {% include 'core/latest-posts.html' %}
+
+        <!-- Chosen posts -->
+        <div class="mb-8">
+            <h2 class="text-xl mb-3 border-b py-2">
+                <span class="border-b-4 border-b-primary py-2">推荐阅读</span>
+            </h2>
+            <ul class="my-4">
+                {% for item in CHOSE_POSTS %}
+                <li class="mb-2"><i class="fa fa-chevron-right text-sm text-slate-300 mr-2"></i> <a href="{{item.get_absolute_url}}">{{item.title}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        {% display_most_commented_posts 3 %}
+
+        {% display_tags %}
+    </div>
+</main>
+
+{% endblock content %}

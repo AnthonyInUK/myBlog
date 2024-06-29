@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load core_extras %}
+
+{% block breadcrumb %}
+<!-- Breadcrumbs -->
+<nav class="py-3 px-5 text-blog-dark bg-gray-50">
+    <div class="container px-2">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+            <li><a href="/"><i class="fa fa-home"></i> 首 页</a></li>
+            <li><i class="fa fa-chevron-right mr-2"></i> <span class="text-gray-400">搜索</span></li>
+        </ol>
+    </div>
+</nav>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+<!-- Main Content -->
+<main class="container my-4 flex flex-col md:flex-row items-start">
+    <div class="w-full bg-white p-2 md:w-3/4 md:mr-4">
+        
+        {% for item in items %}
+        <!-- Article Item -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-2">
+            <!-- Title & Summary -->
+            <div class="w-full md:mr-2 mt-2 md:mt-0">
+                <h3 class="text-lg"><a href="{{item.get_absolute_url}}">{{item.title|highlight:request.GET.q|safe}}</a></h3>
+                <p class="my-2">{{item.summary}}</p>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- 分页按钮 -->
+        <div class="container flex justify-center mx-auto py-4">
+            <ul class="flex">
+                {% if items.has_previous %}
+                <li><a href="?page={{items.previous_page_number}}&q={{request.GET.q}}" class="align-middle mx-4 h-10 py-3 px-5 text-blog-dark bg-white border border-blog-dark">前页</a></li>
+                {% endif %}
+                {% if items.has_next %}
+                <li><a href="?page={{items.next_page_number}}&q={{request.GET.q}}" class="align-middle mx-4 h-10 py-3 px-5 text-blog-dark bg-white border border-blog-dark">后页</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="w-full bg-white p-2 md:w-1/4">
+        <!-- Weather -->
+        {% weather %}
+
+        {% include 'core/categories.html' %}
+
+        {% display_most_commented_posts 3 %}
+
+        {% display_tags %}
+    </div>
+</main>
+
+{% endblock content %}

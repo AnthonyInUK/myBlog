@@ -1,0 +1,11 @@
+<!-- Tags -->
+<div class="mb-2">
+    <h2 class="text-xl mb-3 border-b py-2">
+        <span class="border-b-4 border-b-primary py-2">标签云集</span>
+    </h2>
+    <div class="my-4 text-xs text-white flex flex-wrap uppercase">
+        {% for tag in tags %}
+        <span class="bg-blog-dark p-2 m-1"><a href="{% url 'posts' %}?tag={{tag.slug}}">{{tag.name}}</a></span>
+        {% endfor %}
+    </div>
+</div>
